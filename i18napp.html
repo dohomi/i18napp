@@ -1,0 +1,25 @@
+<template name="layout">
+
+    <section>
+
+        {{>yield}}
+    </section>
+    <p>Current Language: {{lang}}</p>
+    <p>
+        Change Language:
+        <select>
+            {{#each languages }}
+                <option selected="{{isLang}}" value="{{.}}">{{.}}</option>
+            {{/each}}
+        </select>
+    </p>
+</template>
+<template name="Foo">
+    <h1>Foo</h1>
+    <button type="button" data-where="home">Home</button>
+</template>
+
+<template name="Home">
+    <h1>Home</h1>
+    <button type="button" data-where="foo">Foo</button>
+</template>
