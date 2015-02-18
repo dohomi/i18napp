@@ -1,3 +1,4 @@
 [submodule "packages/maritino:iron-router-i18n"]
 	path = packages/maritino:iron-router-i18n
 	url = https://github.com/yoolab/iron-router-i18n.git
+    branch = 0.5.x

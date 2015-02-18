@@ -1,1 +1,0 @@
-Router = new I18NRouter;
