@@ -1,5 +1,19 @@
 <template name="layout">
 
+    <header>
+        {{> loginButtons}}
+
+        <nav>
+            <ul>
+                <li>
+                    <a href="{{pathFor 'home'}}">Home</a>
+                </li>
+                <li>
+                    <a href="{{pathFor 'foo'}}">Foo</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
     <section>
 
         {{>yield}}

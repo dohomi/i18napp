@@ -16,7 +16,7 @@ Router.configure({
     },
     getLanguage: function () {
 
-      Session.get("lang");
+      return Session.get("lang");
     }
   }
 });
@@ -46,10 +46,10 @@ if (Meteor.isClient) {
 
   //util stuff to change language and show current one
   Template.layout.helpers({
-    "lang" : function(){
+    "lang": function () {
       return Session.get("lang");
     },
-    "languages": function(){
+    "languages": function () {
       return languages;
     },
     "isLang": function () {
@@ -57,7 +57,7 @@ if (Meteor.isClient) {
     }
   });
   Template.layout.events({
-    "change select": function(e){
+    "change select": function (e) {
 
       Router.setLanguage($(e.currentTarget).val());
     }

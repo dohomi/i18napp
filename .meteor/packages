@@ -7,5 +7,9 @@
 meteor-platform
 autopublish
 insecure
+
+accounts-password
+
 iron:router
 martino:iron-router-i18n
+accounts-ui
