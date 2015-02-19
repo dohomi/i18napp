@@ -10,9 +10,10 @@ var setLanguageHelper = function (lang) {
   Helpers.setLanguage(lang)
 };
 
-if (Meteor.isClient) {
-  var langSessionSet = !!Session.get('lang');
-}
+var isLangSessionSet = function () {
+  return !!Session.get('lang');
+};
+
 var getLanguage = function () {
   if (Session.get("lang")) {
     return Session.get("lang");
@@ -35,13 +36,13 @@ Router.configure({
     getLanguage: function () {
       var langCode = null;
 
-      if (langSessionSet) {
+      if (isLangSessionSet()) {
         langCode = getLanguage();
       }
 
       var pathLangCode = window.location.pathname.split("/")[1];
 
-      if (!langSessionSet && _.contains(languages, pathLangCode)) {
+      if (!isLangSessionSet() && _.contains(languages, pathLangCode)) {
         langCode = pathLangCode;
       }
 
@@ -50,7 +51,7 @@ Router.configure({
       }
 
       var userLanguage = Meteor.user() && Meteor.user().languageKey;
-      if (!langSessionSet && userLanguage) {
+      if (!isLangSessionSet() && userLanguage) {
         langCode = userLanguage;
       }
       Helpers.setLanguage(langCode);
