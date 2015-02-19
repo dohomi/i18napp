@@ -1,9 +1,24 @@
 if (Meteor.isClient) {
-  Session.setDefault("lang", "en");
+  //Session.setDefault("lang", "en");
 }
 
 
 var languages = ["en", "de"];
+
+var setLanguageHelper = function (lang) {
+  Session.set("lang", lang);
+  Helpers.setLanguage(lang)
+};
+
+if (Meteor.isClient) {
+  var langSessionSet = !!Session.get('lang');
+}
+var getLanguage = function () {
+  if (Session.get("lang")) {
+    return Session.get("lang");
+  }
+  return Helpers.language();
+};
 
 Router.configure({
   layoutTemplate: 'layout',
@@ -12,16 +27,38 @@ Router.configure({
     languages: languages,
 
     setLanguage: function (lang) {
-      Session.set("lang", lang);
+      console.log("setLanguage %s", lang);
+      //Session.set("lang", lang);
+      setLanguageHelper(lang);
     },
+
     getLanguage: function () {
+      var langCode = null;
+
+      if (langSessionSet) {
+        langCode = getLanguage();
+      }
+
+      var pathLangCode = window.location.pathname.split("/")[1];
+
+      if (!langSessionSet && _.contains(languages, pathLangCode)) {
+        langCode = pathLangCode;
+      }
 
       if (Meteor.loggingIn() || !Meteor.userId()) {
         return;
       }
 
-      return Meteor.user() && Meteor.user().languageKey;
+      var userLanguage = Meteor.user() && Meteor.user().languageKey;
+      if (!langSessionSet && userLanguage) {
+        langCode = userLanguage;
+      }
+      Helpers.setLanguage(langCode);
+
+      return langCode;
+
     }
+
   }
 });
 
@@ -51,13 +88,13 @@ if (Meteor.isClient) {
   //util stuff to change language and show current one
   Template.layout.helpers({
     "lang": function () {
-      return Session.get("lang");
+      return Helpers.language();
     },
     "languages": function () {
       return languages;
     },
     "isLang": function () {
-      return this == Session.get("lang");
+      return this == Helpers.language();
     }
   });
   Template.layout.events({
@@ -102,4 +139,18 @@ Meteor.startup(function () {
     }
   }
 
+});
+
+
+Helpers.addDictionary({
+
+  'home': {
+    en: 'Home Content',
+    de: 'Startseiten Inhalt',
+
+  },
+  'foo': {
+    en: 'Foo Content',
+    de: 'Foo Seiteninhalt'
+  }
 });
