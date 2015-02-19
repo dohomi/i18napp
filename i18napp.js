@@ -46,13 +46,16 @@ Router.configure({
         langCode = pathLangCode;
       }
 
-      if (Meteor.loggingIn() || !Meteor.userId()) {
-        return;
-      }
+      if (!langCode) {
 
-      var userLanguage = Meteor.user() && Meteor.user().languageKey;
-      if (!isLangSessionSet() && userLanguage) {
-        langCode = userLanguage;
+        if (Meteor.loggingIn() || !Meteor.userId()) {
+          return;
+        }
+
+        var userLanguage = Meteor.user() && Meteor.user().languageKey;
+        if (!isLangSessionSet() && userLanguage) {
+          langCode = userLanguage;
+        }
       }
       Helpers.setLanguage(langCode);
 
@@ -84,6 +87,8 @@ if (Meteor.isClient) {
   };
   Template.Foo.events(events);
   Template.Home.events(events);
+
+
 
 
   //util stuff to change language and show current one
