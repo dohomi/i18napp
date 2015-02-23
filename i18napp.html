@@ -15,7 +15,6 @@
         </nav>
     </header>
     <section>
-
         {{>yield}}
     </section>
     <p>Current Language: {{lang}}</p>
@@ -28,14 +27,5 @@
         </select>
     </p>
 </template>
-<template name="Foo">
-    <h1>Foo</h1>
-    <h3>{{getText 'foo'}}</h3>
-    <button type="button" data-where="home">Home</button>
-</template>
 
-<template name="Home">
-    <h1>Home</h1>
-    <h3>{{getText 'home'}}</h3>
-    <button type="button" data-where="foo">Foo</button>
-</template>
+

@@ -1,41 +1,4 @@
-var languages = ["en", "de"];
 
-var setLanguageHelper = function (lang) {
-  //Session.set("lang", lang);
-  Helpers.setLanguage(lang)
-};
-
-var getLanguage = function () {
-  if (Session.get("lang")) {
-    return Session.get("lang");
-  }
-  return Helpers.language();
-};
-
-Router.configure({
-  layoutTemplate: 'layout',
-
-  i18n: {
-    languages: languages,
-
-    setLanguage: function (lang) {
-      //console.log("setLanguage %s", lang);
-      //Session.set("lang", lang);
-      setLanguageHelper(lang);
-    }
-
-  }
-});
-
-Router.route("/", {
-  name: "home"
-
-});
-
-Router.route("/foo", {
-  name: "foo"
-
-});
 
 if (Meteor.isClient) {
 
@@ -83,7 +46,6 @@ if (Meteor.isClient) {
   });
   Template.layout.events({
     "change select": function (e) {
-
       Router.setLanguage($(e.currentTarget).val());
     }
   });
@@ -91,50 +53,3 @@ if (Meteor.isClient) {
 }
 
 
-if (Meteor.isServer) {
-  Meteor.publish(null, function () {
-    return Meteor.users.find(this.userId, {fields: {profile: 1, languageKey: 1}});
-  });
-}
-
-Meteor.startup(function () {
-
-  if (Meteor.isServer) {
-
-
-    var testuser = Meteor.users.findOne({username: "testuser@example.com"}), userId;
-
-    // create operator
-    if (!testuser) {
-
-      userId = Accounts.createUser({
-
-        username: "testuser@example.com",
-        email: "testuser@example.com",
-        password: "123123",
-        profile: {
-          firstName: "Test",
-          lastName: "User"
-        }
-      });
-      Meteor.users.update(userId, {$set: {languageKey: 'de'}});
-
-
-    }
-  }
-
-});
-
-
-Helpers.addDictionary({
-
-  'home': {
-    en: 'Home Content',
-    de: 'Startseiten Inhalt',
-
-  },
-  'foo': {
-    en: 'Foo Content',
-    de: 'Foo Seiteninhalt'
-  }
-});
