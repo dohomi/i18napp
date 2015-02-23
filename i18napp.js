@@ -9,7 +9,7 @@ if (Meteor.isClient) {
         userLangKey.set(userLang);
       }
       //console.log(langCodeMissing,"langCodeMissing")
-      if (!Router.isLanguageSet && Router.getLanguage() !== Helpers.language()) {
+      if ( Router.getLanguage() !== Helpers.language()) {
         Helpers.setLanguage(Router.getLanguage());
       }
     });
