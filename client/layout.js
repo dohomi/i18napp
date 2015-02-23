@@ -6,7 +6,7 @@ Template.layout.rendered = function () {
     console.log("initialLangCode", initialLangCodeMissing)
     var userLang = Meteor.user() && Meteor.user().languageKey;
     // here I need to do an action, if no routing is set
-    if (initialLangCodeMissing && !Meteor.loggingIn() && userLang) {
+    if (initialLangCodeMissing === false && !Meteor.loggingIn() && userLang) {
       Router.setLanguage(userLang);
     }
     //console.log(langCodeMissing,"langCodeMissing")
