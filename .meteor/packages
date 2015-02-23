@@ -13,3 +13,4 @@ iron:router
 martino:iron-router-i18n
 accounts-ui
 raix:handlebar-helpers
+reactive-var

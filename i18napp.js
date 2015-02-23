@@ -4,6 +4,10 @@ if (Meteor.isClient) {
 
 
     this.autorun(function () {
+      var userLang = Meteor.user() && Meteor.user().languageKey;
+      if (!Meteor.loggingIn() && userLang) {
+        userLangKey.set(userLang);
+      }
       //console.log(langCodeMissing,"langCodeMissing")
       if (!Router.isLanguageSet && Router.getLanguage() !== Helpers.language()) {
         Helpers.setLanguage(Router.getLanguage());
