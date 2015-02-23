@@ -1,5 +1,3 @@
-
-
 if (Meteor.isClient) {
 
   Template.layout.rendered = function () {
@@ -7,16 +5,9 @@ if (Meteor.isClient) {
 
     this.autorun(function () {
       //console.log(langCodeMissing,"langCodeMissing")
-      var userLang = Meteor.user() && Meteor.user().languageKey;
-      if (!Router.isLanguageSet && !Meteor.loggingIn() && userLang) {
-        if (userLang !== Router.getLanguage()) {
-          Router.setLanguage(Meteor.user().languageKey);
-        }
-      } else {
+      if (!Router.isLanguageSet && Router.getLanguage() !== Helpers.language()) {
         Helpers.setLanguage(Router.getLanguage());
       }
-
-
     });
 
   };
