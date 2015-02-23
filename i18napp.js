@@ -6,12 +6,23 @@ if (Meteor.isClient) {
 var languages = ["en", "de"];
 
 var setLanguageHelper = function (lang) {
-  Session.set("lang", lang);
+  //Session.set("lang", lang);
   Helpers.setLanguage(lang)
 };
 
 var isLangSessionSet = function () {
   return !!Session.get('lang');
+};
+
+var inited = false;
+var initVal;
+
+var setInitVal = function (lang) {
+  if (!inited) {
+    initVal = lang;
+
+    inited = true;
+  }
 };
 
 var getLanguage = function () {
@@ -28,40 +39,11 @@ Router.configure({
     languages: languages,
 
     setLanguage: function (lang) {
-      console.log("setLanguage %s", lang);
+      //console.log("setLanguage %s", lang);
       //Session.set("lang", lang);
       setLanguageHelper(lang);
-    },
-
-    getLanguage: function () {
-      var langCode = null;
-
-      if (isLangSessionSet()) {
-        langCode = getLanguage();
-      }
-
-      var pathLangCode = window.location.pathname.split("/")[1];
-
-      if (!isLangSessionSet() && _.contains(languages, pathLangCode)) {
-        langCode = pathLangCode;
-      }
-
-      if (!langCode) {
-
-        if (Meteor.loggingIn() || !Meteor.userId()) {
-          return;
-        }
-
-        var userLanguage = Meteor.user() && Meteor.user().languageKey;
-        if (!isLangSessionSet() && userLanguage) {
-          langCode = userLanguage;
-        }
-      }
-      Helpers.setLanguage(langCode);
-
-      return langCode;
-
     }
+
 
   }
 });
@@ -78,6 +60,37 @@ Router.route("/foo", {
 
 if (Meteor.isClient) {
 
+  Template.layout.rendered = function () {
+
+
+    this.autorun(function () {
+      var langCodeMissing = Router.initalLangCodeMissing;
+      //console.log(langCodeMissing,"langCodeMissing")
+      var userLang = Meteor.user() && Meteor.user().languageKey;
+      if (langCodeMissing && !Meteor.loggingIn() && userLang) {
+        if (userLang !== Router.getLanguage()) {
+          Router.setLanguage(Meteor.user().languageKey);
+        }
+      } else {
+        Helpers.setLanguage(Router.getLanguage());
+      }
+
+
+    });
+
+    //this.autorun(function () {
+    //
+    //  var user = Meteor.user();
+    //  if (user && user.languageKey) {
+    //    console.log("hier")
+    //    langCode = user.languageKey;
+    //  }
+    //
+    //  Router.setLanguage(langCode);
+    //})
+
+  };
+
 
   var events = {
     "click button": function (e) {
@@ -87,8 +100,6 @@ if (Meteor.isClient) {
   };
   Template.Foo.events(events);
   Template.Home.events(events);
-
-
 
 
   //util stuff to change language and show current one
